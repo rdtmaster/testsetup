@@ -1,9 +1,9 @@
 {
   "product": "testsetup",
   "company": "testcomp",
-  "upgrade-code": "8615055C-D8E0-404C-93BE-441C503BA6F0",
+  "upgrade-code": "0b703c19-ca68-4859-ba27-104f819f1f04",
   "files": {
-    "guid": "378896D8-6749-4821-870A-44CBBB791D0C",
+    "guid": "7df43019-a556-4fdc-ba3d-73d1ae0dcd0e",
     "items": [
       "testsetup.exe"
     ]
@@ -13,7 +13,7 @@
     "examples"
   ],
   "env": {
-    "guid": "0CB88C7F-85A7-4986-B6CE-1CAD5C17EA0E",
+    "guid": "1ce74cfd-9739-4996-83f7-8a2eee98661b",
     "vars": [
       {
         "name": "PATH",
@@ -26,7 +26,7 @@
     ]
   },
   "shortcuts": {
-    "guid": "6DAFD205-3D2D-43D7-BF78-33BFE8746D2A",
+    "guid": "8ff8f75b-cb54-4267-a2ba-0cfdfe5a9b42",
     "items": [
       {
         "name": "testsetup",
