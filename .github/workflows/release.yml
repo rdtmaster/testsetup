@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
       - run: git fetch --force --tags
       - run: git clone https://github.com/mh-cbon/go-msi
-      -name: build go-msi
+      - name: build go-msi
         run: |
         cd go-msi
         go mod init github.com/mh-cbon/go-msi
