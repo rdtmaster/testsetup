@@ -1,9 +1,9 @@
 name: myrelease
 
 on: push
-  #push:
-    #tags:
-      #- '*'
+  push:
+    tags:
+      - '*'
 
 permissions:
   contents: write
@@ -24,7 +24,7 @@ jobs:
         run: go build -v
       - name: release
         uses: softprops/action-gh-release@v1
-        #if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: testsetup.exe
         #env:
