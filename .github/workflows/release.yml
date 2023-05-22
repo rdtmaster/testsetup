@@ -20,5 +20,7 @@ jobs:
       - run: git fetch --force --tags
       - name: tidy
         run: go mod tidy
+      - name: build
+        run: go build -v
         #env:
           #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
