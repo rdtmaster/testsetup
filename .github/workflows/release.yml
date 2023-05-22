@@ -28,8 +28,10 @@ jobs:
       - name: wix path
         run: |
           $env:Path += ";C:\Program Files (x86)\WiX Toolset v3.11\bin"
-          go-msi set-guid
-          go-msi make --msi setup.msi --version 0.0.2
+          cd "c:/program files/go-msi/"
+          go-msi
+          #go-msi set-guid
+          #go-msi make --msi setup.msi --version 0.0.2
       - name: pack things to zip
         run: 7z a testsetup-w64.zip testsetup.exe docs/ examples/
       - name: release
