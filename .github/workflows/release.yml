@@ -26,6 +26,7 @@ jobs:
         run: |
           $env:Path += ";C:\Program Files (x86)\WiX Toolset v3.11\bin"
           choco install go-msi /y
+          echo %path%
           refreshenv
           go-msi set-guid
           go-msi make --msi setup.msi --version 0.0.2
