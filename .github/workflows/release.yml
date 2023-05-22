@@ -14,6 +14,13 @@ jobs:
   myrelease:
     runs-on: windows-latest
     steps:
+      - name: wix path
+        run: |
+          dotnet tool install --global wix --version 4.0.0
+          wix --version
+        #run: |
+          #$env:Path += ";C:\Program Files (x86)\WiX Toolset v3.11\bin"
+          #light.exe      
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
