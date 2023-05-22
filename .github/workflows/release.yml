@@ -17,8 +17,7 @@ jobs:
       - name: wix path
         run: |
           $env:Path += ";C:\Program Files (x86)\WiX Toolset v3.11\bin"
-      - name: candle
-        run: light
+          light.exe
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
