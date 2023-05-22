@@ -14,16 +14,16 @@ jobs:
   myrelease:
     runs-on: windows-latest
     steps:
-      - name: 7zip
-        run: 7z
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - run: git fetch --force --tags
       - name: tidy
         run: go mod tidy -v
-      - name: build
+      - name: build-w64
         run: go build -v -x
+      - name: pack w64
+        run: 7z a testsetup-w64.zip testsetup.exe docs/ examples/
       - name: release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
