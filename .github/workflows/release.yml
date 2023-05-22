@@ -1,6 +1,6 @@
 name: myrelease
 
-on: push
+on: 
   push:
     tags:
       - '*'
