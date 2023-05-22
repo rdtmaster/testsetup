@@ -26,7 +26,7 @@ jobs:
         run: choco install go-msi /y
       - name: wix path
         run: |
-          cd c:\program files\go-msi\
+          cd "c:\program files\go-msi\"
           dir
           #$env:Path += ";C:\Program Files (x86)\WiX Toolset v3.11\bin;c:\Program files\go-msi\"
           go-msi check-env
