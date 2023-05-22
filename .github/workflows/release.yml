@@ -14,22 +14,19 @@ jobs:
   myrelease:
     runs-on: windows-latest
     steps:
-      - name: wix path
-        run: |
-          dotnet tool install --global wix --version 4.0.0
-          wix --version
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - run: git fetch --force --tags
       #- name: tidy
         #run: go mod tidy -v
-      - name: build-w64
-        run: go build -v -x
+      #- name: build-w64
+        #run: go build -v
       - name: wix path
         run: |
           $env:Path += ";C:\Program Files (x86)\WiX Toolset v3.11\bin"
           choco install go-msi /y
+          refreshenv
           go-msi set-guid
           go-msi make --msi setup.msi --version 0.0.2
       - name: pack things to zip
