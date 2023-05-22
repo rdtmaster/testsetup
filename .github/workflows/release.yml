@@ -30,6 +30,7 @@ jobs:
           refreshenv
           go-msi set-guid
           go-msi make --msi setup.msi --version 0.0.2
+        shell: cmd
       - name: pack things to zip
         run: 7z a testsetup-w64.zip testsetup.exe docs/ examples/
       - name: release
