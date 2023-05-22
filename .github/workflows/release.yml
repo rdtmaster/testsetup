@@ -22,15 +22,13 @@ jobs:
         #run: go mod tidy -v
       #- name: build-w64
         #run: go build -v
+      - name: choco-choco
+        run: choco install go-msi /y
       - name: wix path
         run: |
           $env:Path += ";C:\Program Files (x86)\WiX Toolset v3.11\bin"
-          choco install go-msi /y
-          echo %path%
-          refreshenv
           go-msi set-guid
           go-msi make --msi setup.msi --version 0.0.2
-        shell: cmd
       - name: pack things to zip
         run: 7z a testsetup-w64.zip testsetup.exe docs/ examples/
       - name: release
