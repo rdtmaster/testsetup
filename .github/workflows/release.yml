@@ -24,7 +24,7 @@ jobs:
         #run: go build -v
       - name: choco-choco
         run: choco install go-msi /y
-      - run: c:\program files\go-msi\go-msi.exe
+      - run: exec c:\program files\go-msi\go-msi.exe
       - name: wix path
         run: |
           $env:Path += ";C:\Program Files (x86)\WiX Toolset v3.11\bin"
