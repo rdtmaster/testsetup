@@ -14,6 +14,8 @@ jobs:
   myrelease:
     runs-on: windows-latest
     steps:
+      - name: 7zip
+        run: 7z
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
@@ -21,7 +23,7 @@ jobs:
       - name: tidy
         run: go mod tidy -v
       - name: build
-        run: go build -v
+        run: go build -v -x
       - name: release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
