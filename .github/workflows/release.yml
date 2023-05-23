@@ -9,19 +9,22 @@ env:
   EXTRAFILES: docs/ examples/
 permissions:
   contents: write
+  pull-requests: read
 
 jobs:
+  release-on-push:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: rymndhng/release-on-push-action@master
+        with:
+          bump_version_scheme: minor
   myrelease:
     runs-on: windows-latest
     steps:
       - name: install go-msi
         run: choco install go-msi
-      - name: update env
-        run: |
-          $env:Path += ";C:\Program Files\go-msi;C:\Program Files (x86)\WiX Toolset v3.11\bin"
-          $env:TMP = "${{ runner.temp }}"
-          $env:Tempdir = "${{ runner.temp }}"
-          go-msi.exe check-env
       #Show log commented cause it was too verbose, uncomment in case of errs
       #- name: show log
         #run: cat -Path msi.log
@@ -35,9 +38,12 @@ jobs:
         run: |
           $env:GOARCH="386"
           go build -v -o bin/win32/${{env.BIN}}.exe
-      - name: build go-msi and MSIs
+      - name: build MSIs
         run: |
-
+          $env:Path += ";C:\Program Files\go-msi;C:\Program Files (x86)\WiX Toolset v3.11\bin"
+          $env:TMP = "${{ runner.temp }}"
+          $env:Tempdir = "${{ runner.temp }}"
+          go-msi.exe check-env
           go-msi.exe make -p wix64.json -a amd64 --msi ${{env.BIN}}-setup-amd64.msi --version 1.0.2
           go-msi.exe make -p wix86.json -a 386 --msi ${{env.BIN}}-setup-x86.msi --version 1.0.2
       - name: pack things to zip
