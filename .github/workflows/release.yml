@@ -16,6 +16,16 @@ jobs:
     
     runs-on: windows-latest
     steps:
+      - name: Create tag
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{github.sha}}',
+              sha: context.sha
+            })
       - name: install go-msi
         run: choco install go-msi
       #Show log commented cause it was too verbose, uncomment in case of errs
@@ -23,13 +33,7 @@ jobs:
         with:
           fetch-depth: 0
       - run: git fetch --force --tags
-      - uses: rickstaa/action-create-tag@v1
-        id: "tag_create"
-        with:
-          tag: "latest"
-          tag_exists_error: false
-          message: "Latest release"
-
+    
       - name: build-win-amd64
         run: go build -v -o bin/win64/${{env.BIN}}.exe
       - name: build-win32
