@@ -12,26 +12,24 @@ permissions:
   pull-requests: read
 
 jobs:
-  release-on-push:
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - uses: rymndhng/release-on-push-action@master
-        with:
-          bump_version_scheme: minor
   myrelease:
+    
     runs-on: windows-latest
     steps:
       - name: install go-msi
         run: choco install go-msi
       #Show log commented cause it was too verbose, uncomment in case of errs
-      #- name: show log
-        #run: cat -Path msi.log
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - run: git fetch --force --tags
+      - uses: rickstaa/action-create-tag@v1
+        id: "tag_create"
+        with:
+          tag: "latest"
+          tag_exists_error: false
+          message: "Latest release"
+
       - name: build-win-amd64
         run: go build -v -o bin/win64/${{env.BIN}}.exe
       - name: build-win32
