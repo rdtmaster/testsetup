@@ -1,9 +1,9 @@
 name: myrelease
 
-on: push
-  #push:
-    #tags:
-      #- '*'
+on: 
+  push:
+    tags:
+      - '*'
 env:
   BIN: testsetup
   EXTRAFILES: docs/ examples/
@@ -16,16 +16,6 @@ jobs:
     
     runs-on: windows-latest
     steps:
-      - name: Create tag
-        uses: actions/github-script@v5
-        with:
-          script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/devel',
-              sha: context.sha
-            })
       - name: install go-msi
         run: choco install go-msi
       #Show log commented cause it was too verbose, uncomment in case of errs
