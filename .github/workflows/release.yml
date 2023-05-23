@@ -17,7 +17,7 @@ jobs:
       - name: install go-msi
         run: choco install go-msi
       - name: update env
-        run: Update-SessionEnvironment
+        run: $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
       #Show log commented cause it was too verbose, uncomment in case of errs
       #- name: show log
         #run: cat -Path msi.log
