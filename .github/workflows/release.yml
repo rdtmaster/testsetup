@@ -6,7 +6,7 @@ on:
       - '*'
 env:
   BIN: testsetup
-  DIRS: docs/ examples/
+  EXTRAFILES: docs/ examples/
 permissions:
   contents: write
 
@@ -33,7 +33,7 @@ jobs:
           go build -v -o bin/win32/${{env.BIN}}.exe
       - name: build go-msi and MSIs
         run: |
-          $env:Path += ";C:\Program Files\go-msi;C:\Program Files (x86)\WiX Toolset v3.11\bin"
+          $env:Path += ";C:\Program Files (x86)\WiX Toolset v3.11\bin"
           $env:TMP = "${{ runner.temp }}"
           $env:Tempdir = "${{ runner.temp }}"
           go-msi.exe check-env
@@ -41,8 +41,8 @@ jobs:
           go-msi.exe make -p wix86.json -a 386 --msi ${{env.BIN}}-setup-x86.msi --version 1.0.2
       - name: pack things to zip
         run: |
-          7z a ${{env.BIN}}-amd64.zip bin/win64/${{env.BIN}}.exe ${{env.DIRS}}
-          7z a ${{env.BIN}}-x86.zip bin/win32/${{env.BIN.exe}} ${{env.DIRS}}
+          7z a ${{env.BIN}}-amd64.zip bin/win64/${{env.BIN}}.exe ${{env.EXTRAFILES}}
+          7z a ${{env.BIN}}-x86.zip bin/win32/${{env.BIN.exe}} ${{env.EXTRAFILES}}
       - name: release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
