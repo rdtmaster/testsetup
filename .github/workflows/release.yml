@@ -14,17 +14,16 @@ jobs:
   myrelease:
     runs-on: windows-latest
     steps:
-      - run: echo "$BIN"
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - run: git fetch --force --tags
       - name: build-win-amd64
-        run: go build -v -o bin/win64/$BIN.exe
+        run: go build -v -o bin/win64/$env:BIN.exe
       - name: build-win32
         run: |
           $env:GOARCH="386"
-          go build -v -o bin/win32/$BIN.exe
+          go build -v -o bin/win32/$env:BIN.exe
       - name: build go-msi and MSIs
         run: |
           $env:Path += ";d:\a\go-msi;C:\Program Files (x86)\WiX Toolset v3.11\bin"
