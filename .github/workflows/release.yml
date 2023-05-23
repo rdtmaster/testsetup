@@ -38,13 +38,16 @@ jobs:
           go-msi.exe check-env
           go-msi.exe make -p wix64.json -a amd64 --msi setup-x64.msi --version 1.0.2
           go-msi.exe make -p wix86.json -a 386 --msi setup-x86.msi --version 1.0.2
-        #shell: bash
-      #- name: build-w64
-        #run: go build -v
-      #- name: choco-choco go-msi package
-        #run: choco install go-msi /y
+      - name: build-w64
+        run: go build -v -o bin/win64/testsetup.exe
+      - name: build-w32
+        run: |
+          $env:GOARCH="386"
+          go build -v -o bin/win32/testsetup.exe
       - name: pack things to zip
-        run: 7z a testsetup-w64.zip testsetup.exe docs/ examples/
+        run: |
+          7z a testsetup-w64.zip bin/win64/testsetup.exe docs/ examples/
+          7z a testsetup-w32.zip bin/win32/testsetup.exe docs/ examples/
       - name: release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')

@@ -5,7 +5,7 @@
   "files": {
     "guid": "7df43019-a556-4fdc-ba3d-73d1ae0dcd0e",
     "items": [
-      "testsetup.exe"
+      "bin/win64/testsetup.exe"
     ]
   },
   "directories": [
