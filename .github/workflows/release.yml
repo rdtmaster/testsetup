@@ -18,6 +18,8 @@ jobs:
         run: aria2c https://github.com/mh-cbon/go-msi/releases/download/1.0.2/go-msi-amd64.msi
       - name: install go-msi
         run: Start-Process msiexec -ArgumentList "/i go-msi-amd64.msi /qn /L*v msi.log" -NoNewWindow -Wait
+      - name: show log
+        - run: cat -Path msi.log
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
@@ -34,7 +36,7 @@ jobs:
           $env:TMP = "${{ runner.temp }}"
           $env:Tempdir = "${{ runner.temp }}"
           go-msi.exe check-env
-          go-msi.exe make -p wix64.json -a amd64 --msi ${{env.BIN}}-setup-x64.msi --version 1.0.2
+          go-msi.exe make -p wix64.json -a amd64 --msi ${{env.BIN}}-setup-amd64.msi --version 1.0.2
           go-msi.exe make -p wix86.json -a 386 --msi ${{env.BIN}}-setup-x86.msi --version 1.0.2
       - name: pack things to zip
         run: |
