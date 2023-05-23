@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: install go-msi
         run: choco install go-msi
-      -name: update env
+      - name: update env
         run: Update-SessionEnvironment
       #Show log commented cause it was too verbose, uncomment in case of errs
       #- name: show log
