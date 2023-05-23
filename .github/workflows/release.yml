@@ -18,8 +18,9 @@ jobs:
         run: choco install go-msi
       - name: update env
         run: |
-          endlocal
-          refreshenv
+          $env:Path += ";C:\Program Files\go-msi;C:\Program Files (x86)\WiX Toolset v3.11\bin"
+          $env:TMP = "${{ runner.temp }}"
+          $env:Tempdir = "${{ runner.temp }}"
           go-msi.exe check-env
       #Show log commented cause it was too verbose, uncomment in case of errs
       #- name: show log
@@ -36,9 +37,7 @@ jobs:
           go build -v -o bin/win32/${{env.BIN}}.exe
       - name: build go-msi and MSIs
         run: |
-          $env:Path += ";C:\Program Files\go-msi;C:\Program Files (x86)\WiX Toolset v3.11\bin"
-          $env:TMP = "${{ runner.temp }}"
-          $env:Tempdir = "${{ runner.temp }}"
+
           go-msi.exe make -p wix64.json -a amd64 --msi ${{env.BIN}}-setup-amd64.msi --version 1.0.2
           go-msi.exe make -p wix86.json -a 386 --msi ${{env.BIN}}-setup-x86.msi --version 1.0.2
       - name: pack things to zip
