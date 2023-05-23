@@ -23,7 +23,7 @@ jobs:
             github.rest.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: 'refs/tags/${{github.sha}}',
+              ref: 'refs/tags/devel',
               sha: context.sha
             })
       - name: install go-msi
