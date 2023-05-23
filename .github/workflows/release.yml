@@ -19,7 +19,7 @@ jobs:
       - name: install go-msi
         run: Start-Process msiexec -ArgumentList "/i go-msi-amd64.msi /qn /L*v msi.log" -NoNewWindow -Wait
       - name: show log
-        - run: cat -Path msi.log
+        run: cat -Path msi.log
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
