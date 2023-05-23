@@ -29,7 +29,6 @@ jobs:
           go mod tidy -v 
           go build -v
           cd ..
-          $env:tmpdir = ${{ runner.temp }}
           $env:Path += ";C:\Program Files (x86)\WiX Toolset v3.11\bin;c:\Program files\go-msi\"
           go-msi/go-msi.exe check-env
           go-msi/go-msi.exe set-guid -f
