@@ -18,6 +18,7 @@ jobs:
         run: choco install go-msi
       - name: update env
         run: |
+          endlocal
           refreshenv
           go-msi.exe check-env
       #Show log commented cause it was too verbose, uncomment in case of errs
