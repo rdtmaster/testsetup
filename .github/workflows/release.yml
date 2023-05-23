@@ -44,7 +44,7 @@ jobs:
       - name: pack things to zip
         run: |
           7z a ${{env.BIN}}-amd64.zip bin/win64/${{env.BIN}}.exe ${{env.DIRS}}
-          7z a ${{env.BIN}}-x86.zip bin/win32/${{env.BIN.exe}} ${{env.DIRS}
+          7z a ${{env.BIN}}-x86.zip bin/win32/${{env.BIN.exe}} ${{env.DIRS}}
       - name: release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
