@@ -14,7 +14,7 @@ jobs:
   myrelease:
     runs-on: windows-latest
     steps:
-      - run: echo $env:BIN.exe
+      - run: echo $GITHUB_ENV:BIN.exe
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
