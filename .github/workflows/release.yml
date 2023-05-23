@@ -19,6 +19,9 @@ jobs:
           fetch-depth: 0
       - run: git fetch --force --tags
       - run: git clone https://github.com/mh-cbon/go-msi
+      - name: change temp dir
+        run: echo "TMPDIR=${{ runner.temp }}" >> $GITHUB_ENV
+        shell: bash
       - name: build go-msi
         run: |
           cd go-msi
@@ -30,6 +33,7 @@ jobs:
           go-msi/go-msi.exe check-env
           go-msi/go-msi.exe set-guid -f
           go-msi/go-msi.exe make --msi setup.msi --version 0.0.2
+        shell: bash
       #- name: build-w64
         #run: go build -v
       #- name: choco-choco go-msi package
