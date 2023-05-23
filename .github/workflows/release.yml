@@ -17,9 +17,11 @@ jobs:
       - name: Download go-msi
         run: aria2c https://github.com/mh-cbon/go-msi/releases/download/1.0.2/go-msi-amd64.msi
       - name: install go-msi
-        run: Start-Process msiexec -ArgumentList "/i go-msi-amd64.msi /qn /L*v msi.log" -NoNewWindow -Wait
-      - name: show log
-        run: cat -Path msi.log
+        run: choco install go-msi
+        #run: Start-Process msiexec -ArgumentList "/i go-msi-amd64.msi /qn /L*v msi.log" -NoNewWindow -Wait
+      #Show log commented cause it was too verbose, uncomment in case of errs
+      #- name: show log
+        #run: cat -Path msi.log
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
