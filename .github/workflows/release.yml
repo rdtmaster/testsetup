@@ -34,7 +34,7 @@ jobs:
           cd ..
           mkdir d:\a\go-msi
           xcopy /E go-msi d:\a\go-msi
-          rmdir /S /Q go-msi
+          Remove-Item -Path go-msi -Force -Recurse
           go-msi/go-msi.exe check-env
           go-msi/go-msi.exe set-guid -f
           go-msi/go-msi.exe make --msi setup.msi --version 0.0.2
