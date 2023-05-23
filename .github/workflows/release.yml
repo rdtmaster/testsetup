@@ -24,7 +24,6 @@ jobs:
         #shell: bash
       - name: build go-msi
         run: |
-          $env:Tempdir = "d:/a/_temp/
           $env:Path += ";C:\Program Files (x86)\WiX Toolset v3.11\bin"
           cd go-msi 
           go mod init github.com/mh-cbon/go-msi
