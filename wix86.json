@@ -1,0 +1,47 @@
+{
+  "product": "testsetup",
+  "company": "testcomp",
+  "upgrade-code": "0b703c19-ca68-4859-ba27-104f819f1f04",
+  "files": {
+    "guid": "7df43019-a556-4fdc-ba3d-73d1ae0dcd0e",
+    "items": [
+      "testsetup.exe"
+    ]
+  },
+  "directories": [
+    "docs",
+    "examples"
+  ],
+  "env": {
+    "guid": "1ce74cfd-9739-4996-83f7-8a2eee98661b",
+    "vars": [
+      {
+        "name": "PATH",
+        "value": "[INSTALLDIR]",
+        "permanent": "no",
+        "system": "no",
+        "action": "set",
+        "part": "last"
+      }
+    ]
+  },
+  "shortcuts": {
+    "guid": "8ff8f75b-cb54-4267-a2ba-0cfdfe5a9b42",
+    "items": [
+      {
+        "name": "testsetup",
+        "description": "test app",
+        "target": "[INSTALLDIR]\\testsetup.exe",
+        "wdir": "INSTALLDIR",
+        "arguments": "",
+        "icon": ""
+      }
+    ]
+  },
+  "choco": {
+    "description": "Easy way to generate msi package for a Go project",
+    "project-url": "https://github.com/rdtmaster/testsetup",
+    "tags": "generate go msi nuget",
+    "license-url": "https://github.com/mh-cbon/go-msi/blob/master/LICENSE"
+  }
+}

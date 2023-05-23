@@ -18,15 +18,15 @@ jobs:
         with:
           fetch-depth: 0
       - run: git fetch --force --tags
-      - run: git clone https://github.com/mh-cbon/go-msi
-      - name: change temp dir
-        run: echo "TMPDIR=${{ runner.temp }}" >> $GITHUB_ENV
+      #- name: change temp dir
+        #run: echo "TMPDIR=${{ runner.temp }}" >> $GITHUB_ENV
         shell: bash
       - name: build go-msi
         run: |
           $env:Path += ";d:\a\go-msi;C:\Program Files (x86)\WiX Toolset v3.11\bin"
           $env:TMP = "${{ runner.temp }}"
           $env:Tempdir = "${{ runner.temp }}"
+          git clone https://github.com/mh-cbon/go-msi
           cd go-msi 
           go mod init github.com/mh-cbon/go-msi
           go mod tidy -v 
@@ -36,19 +36,13 @@ jobs:
           xcopy /E go-msi d:\a\go-msi
           Remove-Item -Path go-msi -Force -Recurse
           go-msi.exe check-env
-          go-msi.exe set-guid -f
-          go-msi.exe make --msi setup.msi --version 0.0.2
+          go-msi.exe make -p wix64.json -a amd64 --msi setup-x64.msi --version 1.0.2
+          go-msi.exe make -p wix86.json -a 386 --msi setup-x86.msi --version 1.0.2
         #shell: bash
       #- name: build-w64
         #run: go build -v
       #- name: choco-choco go-msi package
         #run: choco install go-msi /y
-      #- name: wix path
-        #run: |
-          #$env:Path += ";C:\Program Files (x86)\WiX Toolset v3.11\bin;c:\Program files\go-msi\"
-          #go-msi check-env
-          #go-msi set-guid
-          #go-msi make --msi setup.msi --version 0.0.2
       - name: pack things to zip
         run: 7z a testsetup-w64.zip testsetup.exe docs/ examples/
       - name: release
@@ -58,6 +52,7 @@ jobs:
           files: |
             testsetup.exe
             testsetup-w64.zip
-            setup.msi
+            setup-x86.msi
+            setup-x64.msi
         #env:
           #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
