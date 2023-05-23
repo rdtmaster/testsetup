@@ -1,9 +1,9 @@
 name: myrelease
 
-on: 
-  push:
-    tags:
-      - '*'
+on: push
+  #push:
+    #tags:
+      #- '*'
 env:
   BIN: testsetup
   EXTRAFILES: docs/ examples/
