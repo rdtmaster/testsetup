@@ -29,4 +29,4 @@ jobs:
       - name: Invoke workflow
         uses: benc-uk/workflow-dispatch@v1
         with:
-          workflow: disp
+          workflow: myrelease

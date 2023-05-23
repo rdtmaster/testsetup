@@ -1,15 +1,13 @@
 name: myrelease
 
-on: 
-  push:
-    tags:
-      - '*'
+on: workflow_dispatch
+  #push:
+    #tags:
+      #- '*'
 env:
   BIN: testsetup
   EXTRAFILES: docs/ examples/
-permissions:
-  contents: write
-  pull-requests: read
+permissions: write-all
 
 jobs:
   myrelease:
