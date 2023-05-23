@@ -39,20 +39,20 @@ jobs:
           xcopy /E go-msi d:\a\go-msi
           Remove-Item -Path go-msi -Force -Recurse
           go-msi.exe check-env
-          go-msi.exe make -p wix64.json -a amd64 --msi $BIN-setup-x64.msi --version 1.0.2
-          go-msi.exe make -p wix86.json -a 386 --msi $BIN-setup-x86.msi --version 1.0.2
+          go-msi.exe make -p wix64.json -a amd64 --msi $env:BIN-setup-x64.msi --version 1.0.2
+          go-msi.exe make -p wix86.json -a 386 --msi $env:BIN-setup-x86.msi --version 1.0.2
       - name: pack things to zip
         run: |
-          7z a $BIN-amd64.zip bin/win64/$BIN.exe $DIRS
-          7z a $BIN-x86.zip bin/win32/$BIN.exe $DIRS
+          7z a $env:BIN-amd64.zip bin/win64/$env:BIN.exe $env:DIRS
+          7z a $env:BIN-x86.zip bin/win32/$env:BIN.exe $env:DIRS
       - name: release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            $BIN-x64.zip
-            $BIN-w86.zip
-            $BIN-setup-x86.msi
-            $BIN-setup-amd6464.msi
+            $env:BIN-x64.zip
+            $env:BIN-w86.zip
+            $env:BIN-setup-x86.msi
+            $env:BIN-setup-amd6464.msi
         #env:
           #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
