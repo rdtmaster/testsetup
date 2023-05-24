@@ -20,15 +20,12 @@ jobs:
         with:
           fetch-depth: 0
       - run: git fetch --force --tags
-      - name: Bump version and push tag
-        uses: jaumann/github-bumpversion-action@v0.0.7
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          tags: true
+      - name: Get Tags
+        run: git fetch origin +refs/tags/*:refs/tags/*
+      - name: Bump Version
+        id: bump_and_tag
+        uses: konsentus/action.bump-version-and-tag@v2
+
       - name: install go-msi
         run: choco install go-msi
   
