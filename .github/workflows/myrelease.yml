@@ -33,7 +33,7 @@ jobs:
   
      
   myrelease:
-    needs: firstjob
+    #needs: firstjob
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
