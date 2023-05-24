@@ -5,6 +5,9 @@ on:
     branches:
       - master
 
+  #push:
+    #tags:
+      #- '*'
 env:
   BIN: testsetup
   EXTRAFILES: docs/ examples/
@@ -12,23 +15,36 @@ permissions: write-all
 
 jobs:
 
+  firstjob:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-ecosystem/action-get-latest-tag@v1
+        id: get-latest-tag
+      - uses: actions-ecosystem/action-bump-semver@v1
+        id: bump-semver
+        with:
+          current_version: ${{ steps.get-latest-tag.outputs.tag }}
+          level: major
+      - uses: actions-ecosystem/action-push-tag@v1
+        with:
+          tag: ${{ steps.bump-semver.outputs.new_version }}
+          message: '${{ steps.bump-semver.outputs.new_version }}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'
+  
+  
+     
   myrelease:
-    
+    needs: firstjob
     runs-on: windows-latest
     steps:
+      - name: install go-msi
+        run: choco install go-msi
+      #Show log commented cause it was too verbose, uncomment in case of errs
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - run: git fetch --force --tags
-      - name: Get Tags
-        run: git fetch origin +refs/tags/*:refs/tags/*
-      - name: Bump Version
-        id: bump_and_tag
-        uses: konsentus/action.bump-version-and-tag@master
-
-      - name: install go-msi
-        run: choco install go-msi
-  
+    
       - name: build-win-amd64
         run: go build -v -o bin/win64/${{env.BIN}}.exe
       - name: build-win32
