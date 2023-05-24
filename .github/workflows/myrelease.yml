@@ -44,8 +44,9 @@ jobs:
         id: curver
         run: |
           $c = git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*"
+          echo "version=$c" >> "$GITHUB_OUTPUT"
           Write-Output $c
-      
+     
       - name: install go-msi
         run: choco install go-msi
       - name: build-win-amd64
