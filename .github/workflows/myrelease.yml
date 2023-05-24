@@ -36,6 +36,7 @@ jobs:
           git tag $v
           git remote set-url --push origin https://rdtmaster:$GITHUB_TOKEN@github.com/rdtmaster/testsetup
           git push --tags
+          git pull --tags
           echo "ver=$(echo $v)" >> $env:GITHUB_OUTPUT
       - name: test me
         run: echo ${{ steps.bumpver.outputs.ver }}
