@@ -24,7 +24,8 @@ jobs:
           fetch-depth: 0
       - run: git fetch --force --tags
       
-      - name: save cur version
+      - name: Bump the version and push tag
+        id: bumpver
         run: |
           $sh = "$(git rev-parse --short HEAD)"
           $c = $(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*")
@@ -32,6 +33,8 @@ jobs:
           Write-Output $v
           git tag $v
           git push --tags
+          echo "ver=$(echo $v)" >> $env:GITHUB_OUTPUT
+      - run: echo "new version: ${{ steps.bumpver.outputs.ver }}"
       - name: install go-msi
         run: choco install go-msi
       - name: build-win-amd64
@@ -45,7 +48,6 @@ jobs:
           $env:Path += ";C:\Program Files\go-msi;C:\Program Files (x86)\WiX Toolset v3.11\bin"
           $env:TMP = "${{ runner.temp }}"
           $env:Tempdir = "${{ runner.temp }}"
-          go-msi.exe check-env
           go-msi.exe make -p wix64.json -a amd64 --msi ${{env.BIN}}-setup-amd64.msi --version 1.0.2
           go-msi.exe make -p wix86.json -a 386 --msi ${{env.BIN}}-setup-x86.msi --version 1.0.2
       - name: pack things to zip
