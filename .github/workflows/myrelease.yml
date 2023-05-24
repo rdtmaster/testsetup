@@ -3,11 +3,7 @@ name: myrelease
 on: 
   push:
     branches:
-      - master
 
-  #push:
-    #tags:
-      #- '*'
 env:
   BIN: testsetup
   EXTRAFILES: docs/ examples/
@@ -23,29 +19,6 @@ jobs:
         with:
           fetch-depth: 0
       - run: git fetch --force --tags
-      
-      - name: get the version
-        id: curver
-        run: |
-          $v = $(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*")
-          echo "ver=$(echo $v)" >> $env:GITHUB_OUTPUT
-          
-      - name: show version
-        run: Write-Output ${{ steps.curver.outputs.ver }}
-      - name: bump semver
-        uses: actions-ecosystem/action-bump-semver@v1
-        id: bumpver
-        with:
-          current_version: ${{ steps.curver.outputs.ver }}
-          level: minor
-      - name: bump semver
-        env: 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git tag ${{ steps.bumpver.outputs.new_version }}
-          git push --tags
-          
-      
       - name: install go-msi
         run: choco install go-msi
       - name: build-win-amd64
@@ -65,11 +38,26 @@ jobs:
         run: |
           7z a ${{env.BIN}}-amd64.zip bin/win64/${{env.BIN}}.exe ${{env.EXTRAFILES}}
           7z a ${{env.BIN}}-x86.zip bin/win32/${{env.BIN.exe}} ${{env.EXTRAFILES}}
-      - name: 'Get Previous tag'
-        id: previoustag
-        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+      - name: get the version
+        id: curver
+        run: |
+          $v = $(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*")
+          echo "ver=$(echo $v)" >> $env:GITHUB_OUTPUT
+          
+      - name: show version
+        run: Write-Output ${{ steps.curver.outputs.ver }}
+      - name: bump semver
+        uses: actions-ecosystem/action-bump-semver@v1
+        id: bumpver
         with:
-          fallback: v1.0.0 # Optional fallback tag to use when no tag can be found
+          current_version: ${{ steps.curver.outputs.ver }}
+          level: minor
+      - name: push the tag
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git tag ${{ steps.bumpver.outputs.new_version }}
+          git push --tags
       - name: release
         uses: softprops/action-gh-release@v1
         #if: startsWith(github.ref, 'refs/tags/')
@@ -80,5 +68,3 @@ jobs:
             ${{env.BIN}}-x86.zip
             ${{env.BIN}}-setup-x86.msi
             ${{env.BIN}}-setup-amd64.msi
-        #env:
-          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
