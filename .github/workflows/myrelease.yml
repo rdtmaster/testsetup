@@ -25,14 +25,13 @@ jobs:
       - run: git fetch --force --tags
       
       - name: save cur version
-        id: curver
+        id: addtag
         run: |
           $sh = "$(git rev-parse --short HEAD)"
           $c = $(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*")
           $v = "de"+$c+"-"+$sh
           Write-Output $v
           git tag $v
-          
      
       - name: install go-msi
         run: choco install go-msi
@@ -63,7 +62,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         #if: startsWith(github.ref, 'refs/tags/')
         with:
-          tag_name: ${{ steps.previoustag.outputs.tag }}
+          #tag_name: ${{ steps.previoustag.outputs.tag }}
           files: |
             ${{env.BIN}}-amd64.zip
             ${{env.BIN}}-x86.zip
