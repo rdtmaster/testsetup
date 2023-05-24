@@ -26,12 +26,15 @@ jobs:
       
       - name: Bump the version and push tag
         id: bumpver
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           $sh = "$(git rev-parse --short HEAD)"
           $c = $(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*")
           $v = "de"+$c+"-"+$sh
           Write-Output $v
           git tag $v
+          git remote set-url --push origin https://rdtmaster:$GITHUB_TOKEN@github.com/rdtmaster/testsetup
           git push --tags
           echo "ver=$(echo $v)" >> $env:GITHUB_OUTPUT
       - name: test me
