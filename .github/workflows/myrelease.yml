@@ -23,13 +23,14 @@ jobs:
         with:
           fetch-depth: 0
       - run: git fetch --force --tags
-      - run: echo $(git rev-parse --short HEAD)
+      
       - name: save cur version
         id: curver
         run: |
-          $c = git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*"
-          echo "version=$c" >> "$GITHUB_OUTPUT"
+          $sh = "$(git rev-parse --short HEAD)"
+          $c = "de"+$(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*")+sh
           Write-Output $c
+          echo "version=$c" >> "$GITHUB_OUTPUT"
      
       - name: install go-msi
         run: choco install go-msi
