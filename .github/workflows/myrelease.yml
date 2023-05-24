@@ -28,7 +28,7 @@ jobs:
         id: curver
         run: |
           $v = $(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*")
-          echo "ver=$(echo $v)" >> $GITHUB_OUTPUT
+          echo "ver=$(echo $v)" >> $env:GITHUB_OUTPUT
           
       - name: show version
         run: Write-Output ${{ steps.curver.outputs.ver }}
