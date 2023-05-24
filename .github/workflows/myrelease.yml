@@ -27,14 +27,13 @@ jobs:
       - name: get the version
         id: curver
         run: |
-
           $v = $(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*")
           Write-Output $v
       - name: bump semver
         uses: actions-ecosystem/action-bump-semver@v1
         id: bumpver
         with:
-          current_version: ${{ steps.bumpver.outputs.ver }}
+          current_version: ${{ steps.curver.outputs.ver }}
           level: minor
       - name: bump semver
         env: 
