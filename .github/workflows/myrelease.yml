@@ -15,7 +15,7 @@ jobs:
   myrelease:
     runs-on: windows-latest
     steps:
-      - run: echo "${{env.BIN}}"
+      - run: echo "a ${{env.BIN}}-windows-amd64.zip bin/win64/${{env.BIN}}.exe ${{env.EXTRAFILES}}"
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
