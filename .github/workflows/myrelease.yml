@@ -24,22 +24,27 @@ jobs:
           fetch-depth: 0
       - run: git fetch --force --tags
       
-      - name: Bump the version and push tag
+      - name: get the version
         id: bumpver
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          $sh = "$(git rev-parse --short HEAD)"
-          $c = $(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*")
-          $v = "de"+$c+"-"+$sh
+          
+          $v = $(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*")
           Write-Output $v
-          git tag $v
+      - name: bump semver
+        uses: actions-ecosystem/action-bump-semver@v1
+        id: bumpver
+        with:
+          current_version: ${{ steps.bumpver.outputs.ver }}
+          level: minor
+      - name: bump semver
+        run: |
+          git tag ${{ steps.bumpver.outputs.new_version }}
           git remote set-url --push origin https://rdtmaster:$GITHUB_TOKEN@github.com/rdtmaster/testsetup
           git push --tags
           git pull --tags
-          echo "ver=$(echo $v)" >> $env:GITHUB_OUTPUT
-      - name: test me
-        run: echo ${{ steps.bumpver.outputs.ver }}
+      
       - name: install go-msi
         run: choco install go-msi
       - name: build-win-amd64
@@ -68,7 +73,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         #if: startsWith(github.ref, 'refs/tags/')
         with:
-          tag_name: ${{ steps.bumpver.outputs.ver }}
+          tag_name: ${{ steps.bumpver.outputs.new_version }}
           files: |
             ${{env.BIN}}-amd64.zip
             ${{env.BIN}}-x86.zip
