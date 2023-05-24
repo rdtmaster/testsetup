@@ -33,17 +33,20 @@ jobs:
   
      
   myrelease:
-    #needs: firstjob
+    needs: firstjob
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - run: git fetch --force --tags
-      - name: show cur version
+      - name: save cur version
+        id: curver
         run: |
-          git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*" >> VERSION
-          cat VERSION
+          git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*" >> $GITHUB_OUTPUT
+      - name: get next version
+        id: nextver
+        run: echo ${{ steps.curver.outputs }}
       - name: install go-msi
         run: choco install go-msi
       - name: build-win-amd64
