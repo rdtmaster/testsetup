@@ -35,7 +35,7 @@ jobs:
           git push --tags
           echo "ver=$(echo $v)" >> $env:GITHUB_OUTPUT
       - name: test me
-        run: echo "new version: ${{ steps.bumpver.outputs.ver }}"
+        run: echo ${{ steps.bumpver.outputs.ver }}
       - name: install go-msi
         run: choco install go-msi
       - name: build-win-amd64
