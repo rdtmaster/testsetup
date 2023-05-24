@@ -21,9 +21,10 @@ jobs:
           fetch-depth: 0
       - run: git fetch --force --tags
       - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.64.0
-        env:
-          WITH_V: true
+        id: tag_version
+        uses: miguelfito/github-bump-and-tag-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: install go-msi
         run: choco install go-msi
   
