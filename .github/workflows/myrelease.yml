@@ -64,7 +64,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         #if: startsWith(github.ref, 'refs/tags/')
         with:
-          #tag_name: ${{ steps.previoustag.outputs.tag }}
+          tag_name: ${{ steps.bumpver.outputs.ver }}
           files: |
             ${{env.BIN}}-amd64.zip
             ${{env.BIN}}-x86.zip
