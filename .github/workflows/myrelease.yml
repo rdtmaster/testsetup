@@ -27,6 +27,11 @@ jobs:
         run: |
           $env:GOARCH="386"
           go build -v -o bin/win32/${{env.BIN}}.exe
+      - name: build-android-arm64
+        run: |
+          $env:GOOS="android"
+          $env:GOARCH="arm64"
+          go build -v -o bin/android-arm64/${{env.BIN}}
       - name: build MSIs
         run: |
           $env:Path += ";C:\Program Files\go-msi;C:\Program Files (x86)\WiX Toolset v3.11\bin"
@@ -36,8 +41,9 @@ jobs:
           go-msi.exe make -p wix86.json -a 386 --msi ${{env.BIN}}-setup-x86.msi --version 1.0.2
       - name: pack things to zip
         run: |
-          7z a ${{env.BIN}}-amd64.zip bin/win64/${{env.BIN}}.exe ${{env.EXTRAFILES}}
-          7z a ${{env.BIN}}-x86.zip bin/win32/${{env.BIN.exe}} ${{env.EXTRAFILES}}
+          7z a ${{env.BIN}}-windows-amd64.zip bin/win64/${{env.BIN}}.exe ${{env.EXTRAFILES}}
+          7z a ${{env.BIN}}windows-x86.zip bin/win32/${{env.BIN}}.exe ${{env.EXTRAFILES}}
+          7z a ${{env.BIN}}-android-arm64.zip bin/android-arm64/${{env.BIN}} ${{env.EXTRAFILES}}
       - name: get the version
         id: curver
         run: |
@@ -64,7 +70,8 @@ jobs:
         with:
           tag_name: ${{ steps.bumpver.outputs.new_version }}
           files: |
-            ${{env.BIN}}-amd64.zip
-            ${{env.BIN}}-x86.zip
+            ${{env.BIN}}-windows-amd64.zip
+            ${{env.BIN}}-android-arm64.zip
+            ${{env.BIN}}-windows-x86.zip
             ${{env.BIN}}-setup-x86.msi
             ${{env.BIN}}-setup-amd64.msi
