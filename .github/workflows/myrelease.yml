@@ -22,9 +22,9 @@ jobs:
       - run: git fetch --force --tags
       - name: Bump version and push tag
         id: tag_version
-        uses: miguelfito/github-bump-and-tag-action@v1
+        uses: undergroundwires/bump-everywhere@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+           release-type: 'none'
       - name: install go-msi
         run: choco install go-msi
   
