@@ -43,10 +43,11 @@ jobs:
       - name: save cur version
         id: curver
         run: |
-          git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*" >> $GITHUB_OUTPUT
+          $x = git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*"
+          echo tag = $x >> $GITHUB_OUTPUT
       - name: get next version
         id: nextver
-        run: echo ${{ steps.curver.outputs }}
+        run: echo ${{ steps.curver.outputs.tag }}
       - name: install go-msi
         run: choco install go-msi
       - name: build-win-amd64
