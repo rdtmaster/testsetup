@@ -19,11 +19,11 @@ jobs:
   myrelease:
     runs-on: windows-latest
     steps:
-      - run: echo $(git rev-parse --short HEAD)
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - run: git fetch --force --tags
+      - run: echo $(git rev-parse --short HEAD)
       - name: save cur version
         id: curver
         run: |
