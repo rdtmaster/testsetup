@@ -27,10 +27,9 @@ jobs:
       - name: save cur version
         id: curver
         run: |
-          $sh = "$(git rev-parse --short HEAD)"
-          $c = "de"+$(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*")+sh
+          $c = "de$(git for-each-ref --sort=-creatordate --count 1 --format=%(refname:short) refs/tags/v*)-$(git rev-parse --short HEAD)"
           Write-Output $c
-          echo "version=$c" >> "$GITHUB_OUTPUT"
+          
      
       - name: install go-msi
         run: choco install go-msi
