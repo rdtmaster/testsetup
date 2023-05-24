@@ -36,14 +36,16 @@ jobs:
     needs: firstjob
     runs-on: windows-latest
     steps:
-      - name: install go-msi
-        run: choco install go-msi
-      #Show log commented cause it was too verbose, uncomment in case of errs
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - run: git fetch --force --tags
-    
+      - name: show cur version
+        run: |
+        git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*" >> VERSION
+        cat VERSION
+      - name: install go-msi
+        run: choco install go-msi
       - name: build-win-amd64
         run: go build -v -o bin/win64/${{env.BIN}}.exe
       - name: build-win32
