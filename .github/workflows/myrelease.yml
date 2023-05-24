@@ -19,7 +19,7 @@ jobs:
   myrelease:
     runs-on: windows-latest
     steps:
-      -run: echo $(git rev-parse --short HEAD)
+      - run: echo $(git rev-parse --short HEAD)
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
