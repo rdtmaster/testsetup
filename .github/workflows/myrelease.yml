@@ -43,9 +43,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git tag ${{ steps.bumpver.outputs.new_version }}
-          git remote set-url --push origin https://rdtmaster:$GITHUB_TOKEN@github.com/rdtmaster/testsetup
           git push --tags
-          git pull --tags
+          
       
       - name: install go-msi
         run: choco install go-msi
