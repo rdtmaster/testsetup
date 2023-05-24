@@ -42,8 +42,8 @@ jobs:
       - run: git fetch --force --tags
       - name: show cur version
         run: |
-        git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*" >> VERSION
-        cat VERSION
+          git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*" >> VERSION
+          cat VERSION
       - name: install go-msi
         run: choco install go-msi
       - name: build-win-amd64
