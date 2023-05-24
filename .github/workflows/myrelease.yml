@@ -28,7 +28,10 @@ jobs:
         id: curver
         run: |
           $v = $(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*")
-          Write-Output $v
+          echo "ver=$(echo $v)" >> $GITHUB_OUTPUT
+          
+      - name: show version
+        run: Write-Output ${{ steps.curver.outputs.ver }}
       - name: bump semver
         uses: actions-ecosystem/action-bump-semver@v1
         id: bumpver
