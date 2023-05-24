@@ -24,7 +24,7 @@ jobs:
         run: git fetch origin +refs/tags/*:refs/tags/*
       - name: Bump Version
         id: bump_and_tag
-        uses: konsentus/action.bump-version-and-tag@v2
+        uses: konsentus/action.bump-version-and-tag@master
 
       - name: install go-msi
         run: choco install go-msi
