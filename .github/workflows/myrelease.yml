@@ -21,10 +21,14 @@ jobs:
           fetch-depth: 0
       - run: git fetch --force --tags
       - name: Bump version and push tag
-        id: tag_version
-        uses: undergroundwires/bump-everywhere@master
+        uses: jaumann/github-bumpversion-action@v0.0.7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push changes
+        uses: ad-m/github-push-action@master
         with:
-           release-type: 'none'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tags: true
       - name: install go-msi
         run: choco install go-msi
   
