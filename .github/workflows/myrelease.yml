@@ -43,10 +43,9 @@ jobs:
       - name: save cur version
         id: curver
         run: |
-          $env:Curver=git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*"
-      - name: get next version
-        id: nextver
-        run: echo $env:Curver
+          $c ==git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*"
+          Write-Output $c
+      
       - name: install go-msi
         run: choco install go-msi
       - name: build-win-amd64
