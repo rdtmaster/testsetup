@@ -25,14 +25,12 @@ jobs:
       - run: git fetch --force --tags
       
       - name: save cur version
-        id: addtag
         run: |
           $sh = "$(git rev-parse --short HEAD)"
           $c = $(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*")
           $v = "de"+$c+"-"+$sh
           Write-Output $v
           git tag $v
-     
       - name: install go-msi
         run: choco install go-msi
       - name: build-win-amd64
