@@ -33,7 +33,7 @@ jobs:
           $env:GOOS="android"
           $env:GOARCH="arm64"
           go build -v -o bin/android-arm64/${{env.BIN}}
-      -name: build linux-amd64
+      - name: build linux-amd64
         run: |
           $env:GOOS="linux"
           $env:GOARCH="amd64"
@@ -56,9 +56,6 @@ jobs:
         run: |
           $v = $(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*")
           echo "ver=$(echo $v)" >> $env:GITHUB_OUTPUT
-          
-      - name: show version
-        run: Write-Output ${{ steps.curver.outputs.ver }}
       - name: bump semver
         uses: actions-ecosystem/action-bump-semver@v1
         id: bumpver
