@@ -23,16 +23,16 @@ jobs:
       - name: install go-msi
         run: choco install go-msi
       - name: build-win-amd64
-        run: go build ${{env.BIN}}.go -v -o bin/win64/${{env.BIN}}.exe
+        run: go build -v -o bin/win64/${{env.BIN}}.exe
       - name: build-win32
         run: |
           $env:GOARCH="386"
-          go build ${{env.BIN}}.go -v -o bin/win32/${{env.BIN}}.exe
+          go build -v -o bin/win32/${{env.BIN}}.exe
       - name: build-android-arm64
         run: |
           $env:GOOS="android"
           $env:GOARCH="arm64"
-          go build ${{env.BIN}}.go -v -o bin/android-arm64/${{env.BIN}}
+          go build -v -o bin/android-arm64/${{env.BIN}}
       - name: build MSIs
         run: |
           $env:Path += ";C:\Program Files\go-msi;C:\Program Files (x86)\WiX Toolset v3.11\bin"
