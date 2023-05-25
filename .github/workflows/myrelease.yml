@@ -17,7 +17,9 @@ jobs:
     steps:
       - run: |
           $targets=@([pscustomobject]@{GOOS="windows";GOARCH="AMD64"})
-          echo $targets
+          foreach ($target in $targets){
+          echo $target.GOOS
+          }
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
