@@ -15,7 +15,7 @@ jobs:
   myrelease:
     runs-on: windows-latest
     steps:
-      - run: echo "a ${{env.BIN}}-windows-amd64.zip this is test"
+      - run: go tool dist list
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
