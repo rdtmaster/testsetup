@@ -16,7 +16,15 @@ jobs:
     runs-on: windows-latest
     steps:
       - run: |
-          $targets=@([pscustomobject]@{GOOS="windows";GOARCH="AMD64"},[pscustomobject]@{GOOS="windows";GOARCH="386"},[pscustomobject]@{GOOS="windows";GOARCH="ARM64"},[pscustomobject]@{GOOS="android";GOARCH="AMD64"},[pscustomobject]@{GOOS="linux";GOARCH="amd64"},[pscustomobject]@{GOOS="linux";GOARCH="386"},[pscustomobject]@{GOOS="darwin";GOARCH="arm64"},)
+          $targets=@(
+          [pscustomobject]@{GOOS="windows";GOARCH="AMD64"},
+          [pscustomobject]@{GOOS="windows";GOARCH="386"},
+          [pscustomobject]@{GOOS="windows";GOARCH="ARM64"},
+          [pscustomobject]@{GOOS="android";GOARCH="AMD64"},
+          [pscustomobject]@{GOOS="linux";GOARCH="amd64"},
+          [pscustomobject]@{GOOS="linux";GOARCH="386"},
+          [pscustomobject]@{GOOS="darwin";GOARCH="arm64"}
+          )
           foreach ($target in $targets){
           echo $target.GOOS
           }
