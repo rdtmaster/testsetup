@@ -16,7 +16,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - run: |
-          $targets=@([pscustomobject]@{GOOS="windows";GOARCH="AMD64})
+          $targets=@([pscustomobject]@{GOOS="windows";GOARCH="AMD64"})
           echo $targets
       - uses: actions/checkout@v3
         with:
