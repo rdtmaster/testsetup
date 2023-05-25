@@ -33,6 +33,11 @@ jobs:
           $env:GOOS="android"
           $env:GOARCH="arm64"
           go build -v -o bin/android-arm64/${{env.BIN}}
+      -name: build linux-amd64
+        run: |
+          $env:GOOS="linux"
+          $env:GOARCH="amd64"
+          go build -v -o bin/linux-amd64/${{env.BIN}}
       - name: build MSIs
         run: |
           $env:Path += ";C:\Program Files\go-msi;C:\Program Files (x86)\WiX Toolset v3.11\bin"
@@ -45,6 +50,7 @@ jobs:
           7z a ${{env.BIN}}-windows-amd64.zip "./bin/win64/${{env.BIN}}.exe" ${{env.EXTRAFILES}}
           7z a ${{env.BIN}}-windows-x86.zip "./bin/win32/${{env.BIN}}.exe" ${{env.EXTRAFILES}}
           7z a ${{env.BIN}}-android-arm64.zip ./bin/android-arm64/${{env.BIN}} ${{env.EXTRAFILES}}
+          7z a ${{env.BIN}}-linux-amd64.zip ./bin/linux-amd64/${{env.BIN}} ${{env.EXTRAFILES}}
       - name: get the version
         id: curver
         run: |
@@ -72,7 +78,8 @@ jobs:
           tag_name: ${{ steps.bumpver.outputs.new_version }}
           files: |
             ${{env.BIN}}-windows-amd64.zip
-            ${{env.BIN}}-android-arm64.zip
             ${{env.BIN}}-windows-x86.zip
             ${{env.BIN}}-setup-x86.msi
             ${{env.BIN}}-setup-amd64.msi
+            ${{env.BIN}}-android-arm64.zip
+            ${{env.BIN}}-linux-amd64.zip

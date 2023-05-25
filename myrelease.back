@@ -3,11 +3,7 @@ name: myrelease
 on: 
   push:
     branches:
-      - master
 
-  #push:
-    #tags:
-      #- '*'
 env:
   BIN: testsetup
   EXTRAFILES: docs/ examples/
@@ -15,68 +11,68 @@ permissions: write-all
 
 jobs:
 
-  firstjob:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-ecosystem/action-get-latest-tag@v1
-        id: get-latest-tag
-      - uses: actions-ecosystem/action-bump-semver@v1
-        id: bump-semver
-        with:
-          current_version: ${{ steps.get-latest-tag.outputs.tag }}
-          level: major
-      - uses: actions-ecosystem/action-push-tag@v1
-        with:
-          tag: ${{ steps.bump-semver.outputs.new_version }}
-          message: '${{ steps.bump-semver.outputs.new_version }}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'
-  
-  
      
   myrelease:
-    needs: firstjob
     runs-on: windows-latest
     steps:
-      - name: install go-msi
-        run: choco install go-msi
-      #Show log commented cause it was too verbose, uncomment in case of errs
+      - run: go tool dist list
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - run: git fetch --force --tags
-    
+      - name: install go-msi
+        run: choco install go-msi
       - name: build-win-amd64
         run: go build -v -o bin/win64/${{env.BIN}}.exe
       - name: build-win32
         run: |
           $env:GOARCH="386"
           go build -v -o bin/win32/${{env.BIN}}.exe
+      - name: build-android-arm64
+        run: |
+          $env:GOOS="android"
+          $env:GOARCH="arm64"
+          go build -v -o bin/android-arm64/${{env.BIN}}
       - name: build MSIs
         run: |
           $env:Path += ";C:\Program Files\go-msi;C:\Program Files (x86)\WiX Toolset v3.11\bin"
           $env:TMP = "${{ runner.temp }}"
           $env:Tempdir = "${{ runner.temp }}"
-          go-msi.exe check-env
           go-msi.exe make -p wix64.json -a amd64 --msi ${{env.BIN}}-setup-amd64.msi --version 1.0.2
           go-msi.exe make -p wix86.json -a 386 --msi ${{env.BIN}}-setup-x86.msi --version 1.0.2
       - name: pack things to zip
         run: |
-          7z a ${{env.BIN}}-amd64.zip bin/win64/${{env.BIN}}.exe ${{env.EXTRAFILES}}
-          7z a ${{env.BIN}}-x86.zip bin/win32/${{env.BIN.exe}} ${{env.EXTRAFILES}}
-      - name: 'Get Previous tag'
-        id: previoustag
-        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+          7z a ${{env.BIN}}-windows-amd64.zip "./bin/win64/${{env.BIN}}.exe" ${{env.EXTRAFILES}}
+          7z a ${{env.BIN}}-windows-x86.zip "./bin/win32/${{env.BIN}}.exe" ${{env.EXTRAFILES}}
+          7z a ${{env.BIN}}-android-arm64.zip ./bin/android-arm64/${{env.BIN}} ${{env.EXTRAFILES}}
+      - name: get the version
+        id: curver
+        run: |
+          $v = $(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*")
+          echo "ver=$(echo $v)" >> $env:GITHUB_OUTPUT
+          
+      - name: show version
+        run: Write-Output ${{ steps.curver.outputs.ver }}
+      - name: bump semver
+        uses: actions-ecosystem/action-bump-semver@v1
+        id: bumpver
         with:
-          fallback: 1.0.0 # Optional fallback tag to use when no tag can be found
+          current_version: ${{ steps.curver.outputs.ver }}
+          level: major
+      - name: push the tag
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git tag ${{ steps.bumpver.outputs.new_version }}
+          git push --tags
       - name: release
         uses: softprops/action-gh-release@v1
         #if: startsWith(github.ref, 'refs/tags/')
         with:
-          tag_name: ${{ steps.previoustag.outputs.tag }}
+          tag_name: ${{ steps.bumpver.outputs.new_version }}
           files: |
-            ${{env.BIN}}-amd64.zip
-            ${{env.BIN}}-x86.zip
+            ${{env.BIN}}-windows-amd64.zip
+            ${{env.BIN}}-android-arm64.zip
+            ${{env.BIN}}-windows-x86.zip
             ${{env.BIN}}-setup-x86.msi
             ${{env.BIN}}-setup-amd64.msi
-        #env:
-          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
