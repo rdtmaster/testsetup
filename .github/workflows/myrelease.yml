@@ -43,14 +43,15 @@ jobs:
         run: |
           7z a ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-windows-amd64.zip "./bin/win64/${{env.BIN}}.exe" ${{env.EXTRAFILES}}
           7z a ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-windows-x86.zip "./bin/win32/${{env.BIN}}.exe" ${{env.EXTRAFILES}}
-      - name: build-win-amd64
+      - name: mazz build
         run: |
           $targets=@(
-          [pscustomobject]@{GOOS="windows";GOARCH="ARM64"},
-          [pscustomobject]@{GOOS="android";GOARCH="AMD64"},
+          [pscustomobject]@{GOOS="windows";GOARCH="arm64"},
+          [pscustomobject]@{GOOS="android";GOARCH="arm64"},
           [pscustomobject]@{GOOS="linux";GOARCH="amd64"},
           [pscustomobject]@{GOOS="linux";GOARCH="386"},
-          [pscustomobject]@{GOOS="darwin";GOARCH="arm64"}
+          [pscustomobject]@{GOOS="darwin";GOARCH="arm64"},
+          [pscustomobject]@{GOOS="darwin";GOARCH="amd64"}
           )
           foreach ($target in $targets){
           $env:GOOS=$target.GOOS
@@ -84,6 +85,6 @@ jobs:
             ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-setup-amd64.msi
             ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-android-arm64.zip
             ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-linux-amd64.zip
-            ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-linux-x86.zip
+            ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-linux-386.zip
             ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-darwin-amd64.zip
             ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-darwin-arm64.zip
