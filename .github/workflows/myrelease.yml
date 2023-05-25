@@ -22,6 +22,17 @@ jobs:
       - run: git fetch --force --tags
       - name: install go-msi
         run: choco install go-msi
+      - name: get the version
+        id: curver
+        run: |
+          $v = $(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*")
+          echo "ver=$(echo $v)" >> $env:GITHUB_OUTPUT
+      - name: bump semver
+        uses: actions-ecosystem/action-bump-semver@v1
+        id: bumpver
+        with:
+          current_version: ${{ steps.curver.outputs.ver }}
+          level: major
       - name: build-win-amd64
         run: go build -v -o bin/win64/${{env.BIN}}.exe
       - name: build-win32
@@ -58,8 +69,8 @@ jobs:
           $env:Path += ";C:\Program Files\go-msi;C:\Program Files (x86)\WiX Toolset v3.11\bin"
           $env:TMP = "${{ runner.temp }}"
           $env:Tempdir = "${{ runner.temp }}"
-          go-msi.exe make -p wix64.json -a amd64 --msi ${{env.BIN}}-setup-amd64.msi --version 1.0.2
-          go-msi.exe make -p wix86.json -a 386 --msi ${{env.BIN}}-setup-x86.msi --version 1.0.2
+          go-msi.exe make -p wix64.json -a amd64 --msi ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-setup-amd64.msi --version 1.0.2
+          go-msi.exe make -p wix86.json -a 386 --msi ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-setup-x86.msi --version 1.0.2
       - name: pack things to zip
         run: |
           7z a ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-windows-amd64.zip "./bin/win64/${{env.BIN}}.exe" ${{env.EXTRAFILES}}
@@ -69,17 +80,6 @@ jobs:
           7z a ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-linux-x86.zip ./bin/linux-x86/${{env.BIN}} ${{env.EXTRAFILES}}
           7z a ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-darwin-amd64.zip ./bin/darwin-amd64/${{env.BIN}} ${{env.EXTRAFILES}}
           7z a ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-darwin-arm64.zip ./bin/darwin-arm64/${{env.BIN}} ${{env.EXTRAFILES}}
-      - name: get the version
-        id: curver
-        run: |
-          $v = $(git for-each-ref --sort=-creatordate --count 1 --format="%(refname:short)" "refs/tags/v*")
-          echo "ver=$(echo $v)" >> $env:GITHUB_OUTPUT
-      - name: bump semver
-        uses: actions-ecosystem/action-bump-semver@v1
-        id: bumpver
-        with:
-          current_version: ${{ steps.curver.outputs.ver }}
-          level: major
       - name: push the tag
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
