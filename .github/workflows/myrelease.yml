@@ -33,6 +33,11 @@ jobs:
           $env:GOOS="android"
           $env:GOARCH="arm64"
           go build -v -o bin/android-arm64/${{env.BIN}}
+      - name: build linux-x86
+        run: |
+          $env:GOOS="linux"
+          $env:GOARCH="386"
+          go build -v -o bin/linux-x86/${{env.BIN}}
       - name: build linux-amd64
         run: |
           $env:GOOS="linux"
@@ -51,6 +56,7 @@ jobs:
           7z a ${{env.BIN}}-windows-x86.zip "./bin/win32/${{env.BIN}}.exe" ${{env.EXTRAFILES}}
           7z a ${{env.BIN}}-android-arm64.zip ./bin/android-arm64/${{env.BIN}} ${{env.EXTRAFILES}}
           7z a ${{env.BIN}}-linux-amd64.zip ./bin/linux-amd64/${{env.BIN}} ${{env.EXTRAFILES}}
+          7z a ${{env.BIN}}-linux-x86.zip ./bin/linux-x86/${{env.BIN}} ${{env.EXTRAFILES}}
       - name: get the version
         id: curver
         run: |
@@ -80,3 +86,4 @@ jobs:
             ${{env.BIN}}-setup-amd64.msi
             ${{env.BIN}}-android-arm64.zip
             ${{env.BIN}}-linux-amd64.zip
+            ${{env.BIN}}-linux-x86.zip
