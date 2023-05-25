@@ -43,6 +43,16 @@ jobs:
           $env:GOOS="linux"
           $env:GOARCH="amd64"
           go build -v -o bin/linux-amd64/${{env.BIN}}
+      - name: build darwin/amd64
+        run: |
+          $env:GOOS="darwin"
+          $env:GOARCH="amd64"
+          go build -v -o bin/darwin-amd64/${{env.BIN}}
+      - name: build darwin/arm64
+        run: |
+          $env:GOOS="darwin"
+          $env:GOARCH="arm64"
+          go build -v -o bin/darwin-arm64/${{env.BIN}}
       - name: build MSIs
         run: |
           $env:Path += ";C:\Program Files\go-msi;C:\Program Files (x86)\WiX Toolset v3.11\bin"
@@ -57,6 +67,8 @@ jobs:
           7z a ${{env.BIN}}-android-arm64.zip ./bin/android-arm64/${{env.BIN}} ${{env.EXTRAFILES}}
           7z a ${{env.BIN}}-linux-amd64.zip ./bin/linux-amd64/${{env.BIN}} ${{env.EXTRAFILES}}
           7z a ${{env.BIN}}-linux-x86.zip ./bin/linux-x86/${{env.BIN}} ${{env.EXTRAFILES}}
+          7z a ${{env.BIN}}-darwin-amd64.zip ./bin/darwin-amd64/${{env.BIN}} ${{env.EXTRAFILES}}
+          7z a ${{env.BIN}}-darwin-arm64.zip ./bin/darwin-arm64/${{env.BIN}} ${{env.EXTRAFILES}}
       - name: get the version
         id: curver
         run: |
@@ -87,3 +99,5 @@ jobs:
             ${{env.BIN}}-android-arm64.zip
             ${{env.BIN}}-linux-amd64.zip
             ${{env.BIN}}-linux-x86.zip
+            ${{env.BIN}}-darwin-amd64.zip
+            ${{env.BIN}}-darwin-arm64.zip
