@@ -15,7 +15,7 @@ jobs:
   myrelease:
     runs-on: windows-latest
     steps:
-      - run: go tool dist list
+      #- run: go tool dist list
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
