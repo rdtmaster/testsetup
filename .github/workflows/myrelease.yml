@@ -16,12 +16,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - run: |
-        $targets = [
-         [PSCustomObject]@{
-          GOOS='windows'
-          GOARC='arm64'
-         }
-        ]
+        $targets=@([pscustomobject]@{GOOS="windows";GOARCH="AMD64})
+        echo $targets
         echo $targets
       - uses: actions/checkout@v3
         with:
