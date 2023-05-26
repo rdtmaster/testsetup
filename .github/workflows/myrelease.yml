@@ -43,6 +43,13 @@ jobs:
         run: |
           7z a ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-windows-amd64.zip "./bin/win64/${{env.BIN}}.exe" ${{env.EXTRAFILES}}
           7z a ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-windows-x86.zip "./bin/win32/${{env.BIN}}.exe" ${{env.EXTRAFILES}}
+      - name: build MSIs
+        run: |
+          $env:Path += ";C:\Program Files\go-msi;C:\Program Files (x86)\WiX Toolset v3.11\bin"
+          $env:TMP = "${{ runner.temp }}"
+          $env:Tempdir = "${{ runner.temp }}"
+          go-msi.exe make -p wix64.json -a amd64 --msi ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-setup-amd64.msi --version 1.0.2
+          go-msi.exe make -p wix86.json -a 386 --msi ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-setup-x86.msi --version 1.0.2
       - name: mass build
         run: |
           $targets=@(
@@ -69,14 +76,7 @@ jobs:
           go build -v -o bin/$(echo $target.GOOS)-$(echo $target.GOARCH)/${{env.BIN}}
           7z a ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-$(echo $target.GOOS)-$(echo $target.GOARCH).zip ./bin/$(echo $target.GOOS)-$(echo $target.GOARCH)/${{env.BIN}} ${{env.EXTRAFILES}}
           }
-          
-      - name: build MSIs
-        run: |
-          $env:Path += ";C:\Program Files\go-msi;C:\Program Files (x86)\WiX Toolset v3.11\bin"
-          $env:TMP = "${{ runner.temp }}"
-          $env:Tempdir = "${{ runner.temp }}"
-          go-msi.exe make -p wix64.json -a amd64 --msi ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-setup-amd64.msi --version 1.0.2
-          go-msi.exe make -p wix86.json -a 386 --msi ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-setup-x86.msi --version 1.0.2
+      
       - name: push the tag
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
