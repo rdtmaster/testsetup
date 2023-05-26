@@ -48,6 +48,9 @@ jobs:
           $targets=@(
           [pscustomobject]@{GOOS="windows";GOARCH="arm64"},
           [pscustomobject]@{GOOS="android";GOARCH="arm64"},
+          [pscustomobject]@{GOOS="android";GOARCH="arm"},
+          [pscustomobject]@{GOOS="ios";GOARCH="arm64"},
+          [pscustomobject]@{GOOS="ios";GOARCH="amd64"},
           [pscustomobject]@{GOOS="linux";GOARCH="amd64"},
           [pscustomobject]@{GOOS="linux";GOARCH="386"},
           [pscustomobject]@{GOOS="linux";GOARCH="mips"},
@@ -60,6 +63,7 @@ jobs:
           [pscustomobject]@{GOOS="solaris";GOARCH="amd64"}
           )
           foreach ($target in $targets){
+          echo "=== Building $(echo $target) ==="
           $env:GOOS=$target.GOOS
           $env:GOARCH=$target.GOARCH
           go build -v -o bin/$(echo $target.GOOS)-$(echo $target.GOARCH)/${{env.BIN}}
@@ -90,6 +94,9 @@ jobs:
             ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-setup-x86.msi
             ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-setup-amd64.msi
             ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-android-arm64.zip
+            ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-android-arm.zip
+            ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-ios-amd64.zip
+            ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-ios-arm64.zip
             ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-linux-amd64.zip
             ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-linux-386.zip
             ${{env.BIN}}-${{ steps.bumpver.outputs.new_version }}-linux-mipsle.zip
